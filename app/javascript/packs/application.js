@@ -15,3 +15,6 @@ require("trix")
 require("@rails/actiontext")
 
 import "controllers"
+
+// Tailwind CSS
+import "stylesheets/application" // ADD THIS LINE

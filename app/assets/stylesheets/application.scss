@@ -14,3 +14,7 @@
  *= require_self
  */
  @import "./actiontext.scss";
+ @import "tailwindcss/base";
+ @import "tailwindcss/components";
+
+ @import "tailwindcss/utilities";

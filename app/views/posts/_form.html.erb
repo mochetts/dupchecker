@@ -12,10 +12,12 @@
   <% end %>
 
   <div class="field">
-    <%= form.text_area :content, cols: 200, rows: 30 %>
+    <%= form.rich_text_area :content, cols: 200, rows: 30 %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Go!" %>
+    <div class="rounded-md">
+      <%= form.submit "Detect", class: 'border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 py-2 text-sm px-5' %>
+    </div>
   </div>
 <% end %>

@@ -1,5 +1,27 @@
-<h1>Plagiarism Detector</h1>
+<h1 class="text-4xl font-bold text-gray-900 sm:truncate">Plagiarism Detector</h1>
 
 <p id="notice"><%= notice %></p>
 
-<%= render 'form', post: @post %>
+<div class="flex flex-column mt-5 divide-x-4 divide-yellow-600 divide-dashed">
+
+  <div class="py-5 pr-5 flex-grow max-w-1/2 min-w-1/2">
+    <%= render 'form', post: @post %>
+  </div>
+
+  <% if defined?(@dupes) && @dupes.any? %>
+    <div class="p-5 bl flex-grow">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate">Results Found</h2>
+      <% @dupes.each do |dupe| %>
+        <div class="mt-4">
+          <div class="text-purple-600 font-bold"><%= dupe[:file] %></div>
+          <% dupe[:matches].each do |match| %>
+            <div class="mt-2">
+              <div class="whitespace-pre-wrap"><%= highlight_dupe(@plain_text, dupe[:content], match[:indices], match[:phrase]) %></div>
+            </div>
+          <% end %>
+          <br/>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
