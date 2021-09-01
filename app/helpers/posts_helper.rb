@@ -10,7 +10,8 @@ module PostsHelper
   # Returns the HTML string
   def highlight_dupe(plain_text, file_content, indices, duped_phrase)
     matched_text_class = 'p-3 bg-gray-50 mb-4 rounded-sm'
-    ("<div class='#{matched_text_class}'>" + indices.map { |index|
+
+    inner_content = indices.map { |index|
       dupe_start = find_dupe_start(plain_text, file_content, index, duped_phrase)
       dupe_end = find_dupe_end(plain_text, file_content, index, duped_phrase)
 
@@ -21,7 +22,9 @@ module PostsHelper
       trimmed_content = file_content[min_index..max_index]
 
       "...#{trimmed_content.gsub(duped_text, "<span class='text-red-500'>#{duped_text}</span>")}..."
-    }.join("</div><div class='#{matched_text_class}'>") + "</div>").html_safe
+    }.join("</div><div class='#{matched_text_class}'>")
+
+    "<div class='#{matched_text_class}'>#{inner_content}</div>".html_safe
   end
 
 private
