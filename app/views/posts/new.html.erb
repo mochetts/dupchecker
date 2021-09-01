@@ -8,20 +8,10 @@
     <%= render 'form', post: @post %>
   </div>
 
-  <% if defined?(@dupes) && @dupes.any? %>
+  <% if defined?(@dupes) && @dupes&.any? %>
     <div class="p-5 bl flex-grow">
       <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate">Results Found</h2>
-      <% @dupes.each do |dupe| %>
-        <div class="mt-4">
-          <div class="text-purple-600 font-bold"><%= dupe[:file] %></div>
-          <% dupe[:matches].each do |match| %>
-            <div class="mt-2">
-              <div class="whitespace-pre-wrap"><%= highlight_dupe(@plain_text, dupe[:content], match[:indices], match[:phrase]) %></div>
-            </div>
-          <% end %>
-          <br/>
-        </div>
-      <% end %>
+      <%= render partial: "dupe", collection: @dupes, as: :dupe, locals: { plain_text: @plain_text } %>
     </div>
   <% end %>
 </div>
