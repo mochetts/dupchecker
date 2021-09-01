@@ -42,6 +42,9 @@ Run `bundle exec rspec`
 3. The results show up on the right side of the screen:
 ![image](https://user-images.githubusercontent.com/3678598/131676402-87885fd3-ab7c-40a6-a89b-2541e05893e2.png)
 
+4. If no results are found,  we display it accordingly:
+![image](https://user-images.githubusercontent.com/3678598/131694469-cfc59c40-c8d1-4d64-b71b-e4e16a379843.png)
+
 # Rich text editing
 
 In order to be able to insert rich text, [Basecamp's trix editor](https://github.com/basecamp/trix) was used:
