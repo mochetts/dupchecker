@@ -1,24 +1,32 @@
-# README
+# Clearscope Duplicate Checker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+<h1 align="center">
+  <p align="center">
+    <a href="https://app.travis-ci.com/mochetts/dupchecker">
+      <img alt="Build Status" src="https://app.travis-ci.com/mochetts/dupchecker.svg?branch=main"/>
+    </a>
+  </p>
+</h1>
 
-Things you may want to cover:
+This project introduces an implementation of a simple plagiarism detection software.
+# Demo
 
-* Ruby version
+For quick demonstration purposes, you can find the app running under this link:
 
-* System dependencies
+https://clearscope-dupchecker.herokuapp.com/
+# Dependencies
 
-* Configuration
+* Ruby 2.6.3
 
-* Database creation
+* [Trix Editor](https://github.com/basecamp/trix), [Tailwind CSS](https://tailwindcss.com/)
+# Configuration and setup
 
-* Database initialization
+The project uses sqlite on local and test environments and posgres in production (heroku). So for local development there's no outstanding database config.
 
-* How to run the test suite
+Simply run `rails db:migrate` to initialize the database.
+# Continuous Integration
 
-* Services (job queues, cache servers, search engines, etc.)
+This project is integrated with Travis for CI purposes. Check [this link](https://app.travis-ci.com/github/mochetts/dupchecker) to access the travis builds.
+# Running the test suite
 
-* Deployment instructions
-
-* ...
+Run `bundle exec rspec`
