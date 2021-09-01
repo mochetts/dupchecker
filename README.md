@@ -31,7 +31,7 @@ This project is integrated with Travis for CI purposes. Check [this link](https:
 
 Run `bundle exec rspec`
 
-# User flow
+# User flow 🚶🏻‍♀️
 
 1. The user writes some text:
 ![image](https://user-images.githubusercontent.com/3678598/131676159-85431acb-4bc4-4028-8b1b-d9f3d5c38c26.png)
@@ -45,20 +45,20 @@ Run `bundle exec rspec`
 4. If no results are found,  we display it accordingly:
 ![image](https://user-images.githubusercontent.com/3678598/131694469-cfc59c40-c8d1-4d64-b71b-e4e16a379843.png)
 
-# Rich text editing
+# Rich text editing 🖊️
 
 In order to be able to insert rich text, [Basecamp's trix editor](https://github.com/basecamp/trix) was used:
 ![image](https://user-images.githubusercontent.com/3678598/131677512-5c120c55-6c6a-4eea-91c7-9429ecb8360c.png)
 
-Worthy to mention that the text the user inputs in this editor is not store, nor used for any purpose other than looking for plagiarism within the data files.
+Worthy to mention that the text the user inputs in this editor is not stored, nor used for any purpose other than looking for plagiarism within the data files.
 
-# Data files
+# Data files 📄
 
 The data files in which the algorithm will look for plagiarism are added within the repo in the `app/data` folder.
 
-# Algorithm
+# Algorithm  ⚙️
 
-The duplicate find algorithm consist in 2 main procedures:
+The duplicate find algorithm consist in 3 main steps/considerations:
 
 1. Normalize both the input text and the data files contents. The reason behind this is that we can establish a common ground for more accurate comparisons. The normalizations done are:
  - down-casing
@@ -88,7 +88,7 @@ This algorithm will return an array containing a hash with the following structu
 
 For this algorithm a scan using an exact match regex was used to find the normalized version of a phrase within the normalized version of the file.
 
-# Second stage processing
+# Second stage processing 🔨
 
 In order to provide a better feedback and extend the algorithm we post process the duplications when rendering them trying to find not only the duplications that are split by punctuations and line breaks, but we extend the lookup forward and backwards for each phrase until we there's no coincidence with the file's original text.
 
@@ -108,10 +108,16 @@ So if one of the data files contains this exact whole text, the duplicate finder
 
 Due to this and in order to be more accurate with the displayed results we post-process the algorithm results in a `PostHelper` trying to match as much as we can backwards and forwards of the initial duplicated phrase.
 
-# Performance Consideration
+# Performance Consideration 🚀
 
 The best way to achieve optimal performance is to index every minimum word length phrase. That way we could avoid using regex to find the plagiarism matches, therefore avoiding an excessive regex backtracking due to a poorly picked word count or due to the usage of large files.  This wasn't implemented, but could be implemented in a future version.
 
 However, in order to provide some IO performance. The data files are loaded in memory when the rails server starts. For that, data loader initializer was added that it calls the `init` method of the `DuplicateFinderService`. That `init` method simply calls the `files` method in order to memoize the contents of the files within the class. Given that rails caches the classes as soon as they are loaded, we're also caching the files in server memory.
 
 Worthy to say that this is good for this particular task, but in a real world scenario one would cache the file contents in an in memory caching system such as Redis.
+
+# Future work 🔮
+
+1. Add a way (sidebar or modal) to show the full file contents highlighting the duplications
+2. Highlight the duplicated text in the rich text editor
+3. Add integration tests (e.g using selenium)
