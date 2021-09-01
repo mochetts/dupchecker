@@ -38,7 +38,6 @@ class DuplicateFinderService
 
     # Public: Finds all files containing duplicate phrases for the given text.
     #
-    #
     # Returns a Hash with the following attributes:
     #   name: Name of the file containing the duplicate
     #   original: Original text of the file

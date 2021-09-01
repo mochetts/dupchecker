@@ -1,4 +1,13 @@
 module PostsHelper
+
+  # Public: Provides an HTML that renders the instances of duplication for a single phrase within a file.
+  #
+  # plain_text - String - text the user provided as input
+  # file_content - String - content of the file being iterated on
+  # index - Integer - initial minimum duplicate index provided by the DuplicateFinderService.
+  # duped_phrase - String - initial duplicated phrase that was provided by the DuplicateFinderService
+  #
+  # Returns the HTML string
   def highlight_dupe(plain_text, file_content, indices, duped_phrase)
     matched_text_class = 'p-3 bg-gray-50 mb-4 rounded-sm'
     ("<div class='#{matched_text_class}'>" + indices.map { |index|
@@ -17,6 +26,15 @@ module PostsHelper
 
 private
 
+  # Private: Finds the minimum duplicate start by backwards comparing
+  # the input text and the file content until a difference is found.
+  #
+  # plain_text - String - text the user provided as input
+  # file_content - String - content of the file being iterated on
+  # index - Integer - initial minimum duplicate index provided by the DuplicateFinderService.
+  # duped_phrase - String - initial duplicated phrase that was provided by the DuplicateFinderService
+  #
+  # Returns the minimum duplicate start index
   def find_dupe_start(plain_text, file_content, index, duped_phrase)
     plain_text_start_index = plain_text.index(duped_phrase)
     start_index = index
@@ -38,6 +56,15 @@ private
     start_index + 1
   end
 
+  # Private: Finds the maximum duplicate end by forward comparing
+  # the input text and the file content until a difference is found.
+  #
+  # plain_text - String - text the user provided as input
+  # file_content - String - content of the file being iterated on
+  # index - Integer - initial minimum duplicate index provided by the DuplicateFinderService.
+  # duped_phrase - String - initial duplicated phrase that was provided by the DuplicateFinderService
+  #
+  # Returns the maximum duplicate end index
   def find_dupe_end(plain_text, file_content, index, duped_phrase)
     plain_text_end_index = plain_text.index(duped_phrase) + duped_phrase.length
     end_index = index + duped_phrase.length
@@ -59,6 +86,7 @@ private
     end_index - 1
   end
 
+  # Private: Returns true if the character is a newline or a whitespace
   def is_new_line_or_whitespace(char)
     char == "\n" || char == "\n\r" || char == " " || char == "\t" || char&.ord == 160 # nbsp
   end
