@@ -54,7 +54,7 @@ RSpec.describe DuplicateFinderService do
       test_text = 'becomes dicier as the focus on low-carbohydrate foods typically steers dieters in the direction of cancer-causing foods and those linked to many of the other conditions it claims to help or eliminate: heart disease, cancer'
       result = DuplicateFinderService.find_for(test_text)
       expect(result.count).to eq 1
-      expect(result.first[:file]).to eq 'Keto diet _a recipe for bad health,_ study warns.txt'
+      expect(result.first[:file_name]).to eq 'Keto diet _a recipe for bad health,_ study warns.txt'
 
       first_match = result.first[:matches].first
       expect(first_match[:phrase]).to eq test_text
@@ -65,7 +65,7 @@ RSpec.describe DuplicateFinderService do
       test_text = "'ketogenic diets have low long-term tolerability and are not sustainable for many individuals,' researchers wrote"
       result = DuplicateFinderService.find_for(test_text)
       expect(result.count).to eq 1
-      expect(result.first[:file]).to eq 'Keto diet _a recipe for bad health,_ study warns.txt'
+      expect(result.first[:file_name]).to eq 'Keto diet _a recipe for bad health,_ study warns.txt'
 
       first_match = result.first[:matches].first
       expect(first_match[:phrase]).to eq test_text
@@ -76,7 +76,7 @@ RSpec.describe DuplicateFinderService do
       test_text = "All rights reserved. Our website services, content, and products are for informational purposes only."
       result = DuplicateFinderService.find_for(test_text)
       expect(result.count).to eq 2
-      expect(result.first[:file]).to eq 'The Ketogenic Diet_ A Detailed Beginner_s Guide to Keto - Healthline.txt'
+      expect(result.first[:file_name]).to eq 'The Ketogenic Diet_ A Detailed Beginner_s Guide to Keto - Healthline.txt'
 
       first_match = result.first[:matches].first
       expect(first_match[:phrase]).to eq 'Our website services, content, and products are for informational purposes only.'
