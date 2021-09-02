@@ -70,6 +70,18 @@ RSpec.describe DuplicateFinderService do
       expect(first_match[:phrase]).to eq 'Our website services, content, and products are for informational purposes only'
       expect(first_match[:indices]).to match_array [23717, 23975]
     end
+
+    it "should escape regex special characters" do
+      test_text = "54. Schnabel, T.G. (1928). AN experience with a (ketogenic) dietary in migraine*. Ann. Intern. Med. 2, 341-347"
+      result = DuplicateFinderService.find_for(test_text)
+      expect(result.count).to eq 0
+    end
+
+    it "should not detect short phrases" do
+      test_text = "AN experience with a ketogenic dietary in"
+      result = DuplicateFinderService.find_for(test_text)
+      expect(result.count).to eq 0
+    end
   end
 
 end

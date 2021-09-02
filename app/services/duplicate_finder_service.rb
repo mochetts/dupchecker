@@ -2,7 +2,7 @@
 
 class DuplicateFinderService
   PUNCTUATIONS_AND_LINE_BREAKS = /\.|!|\?|\r\n|\n/
-  MIN_WORD_COUNT = 10
+  MIN_WORD_COUNT = 8
 
   class << self
 
@@ -50,7 +50,7 @@ class DuplicateFinderService
 
         matches = find_duplicate_phrases_in_file(phrases, file)
 
-        if matches&.any?
+        if matches.any?
           {
             file: file[:name],
             content: file[:original],
@@ -58,7 +58,7 @@ class DuplicateFinderService
           }
         end
 
-      }.compact.presence
+      }.compact
     end
 
   private
@@ -83,7 +83,8 @@ class DuplicateFinderService
       phrases.map { |phrase|
 
         # Find all indices of the phrase within the text
-        indices = file[:normalized].enum_for(:scan, /(?=#{phrase[:normalized]})/).map do
+        escaped_phrase = Regexp.escape(phrase[:normalized])
+        indices = file[:normalized].enum_for(:scan, /(?=#{escaped_phrase})/).map do
           Regexp.last_match.offset(0).first
         end
 
@@ -93,7 +94,7 @@ class DuplicateFinderService
             indices: indices,
           }
         end
-      }.compact.presence
+      }.compact
     end
 
   end
