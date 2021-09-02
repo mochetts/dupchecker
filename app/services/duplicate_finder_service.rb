@@ -1,7 +1,6 @@
 # Class in charge of finding duplicate texts across the source text files.
 
 class DuplicateFinderService
-  PUNCTUATIONS_AND_LINE_BREAKS = /\.|!|\?|\r\n|\n/
   MIN_WORD_COUNT = 8
 
   class << self
@@ -30,9 +29,11 @@ class DuplicateFinderService
     #
     # The normalizaitons done are:
     #  - Downcases the text
-    #  - Replaces all types of quotes for double quotes
+    #  - Replaces all types of quotes, accented characters and punctuations for double quotes
     def normalize(text)
-      text.downcase.gsub(/"|'|“|”/, '"')
+      text.
+        downcase.
+        gsub(/"|'|“|”|[À-ÿ]|[.!?\\-]/, '"')
     end
 
 
@@ -52,8 +53,8 @@ class DuplicateFinderService
 
         if matches.any?
           {
-            file: file[:name],
-            content: file[:original],
+            file_name: file[:name],
+            file_content: file[:original],
             matches: matches,
           }
         end
@@ -66,9 +67,10 @@ class DuplicateFinderService
     # Private: Splits a text by the punctuations and new lines.
     # Excludes phrases that don't have enough words to be considered as plagiarism.
     def split_phrases(text)
-      text.split(PUNCTUATIONS_AND_LINE_BREAKS).reject { |phrase|
+      ps = PragmaticSegmenter::Segmenter.new(text: text)
+      ps.segment.reject { |phrase|
         phrase.split.count < MIN_WORD_COUNT
-      }.map { |phrase|
+      }.uniq.map { |phrase|
         {
           original: phrase.strip! || phrase, # Remove trailing and leading whitespaces
           normalized: normalize(phrase),

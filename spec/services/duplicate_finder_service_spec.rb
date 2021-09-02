@@ -14,6 +14,18 @@ RSpec.describe DuplicateFinderService do
       result = DuplicateFinderService.normalize(test_text)
       expect(result).to eq '"this" "is some" "text"'
     end
+
+    it "should replace all accented characters by double quotes" do
+      test_text = 'áàâéèêíîóúüû'
+      result = DuplicateFinderService.normalize(test_text)
+      expect(result).to eq '""""""""""""'
+    end
+
+    it "should replace all punctuations by double quotes" do
+      test_text = '!!..??--'
+      result = DuplicateFinderService.normalize(test_text)
+      expect(result).to eq '""""""""'
+    end
   end
 
   describe "#files" do
@@ -67,7 +79,7 @@ RSpec.describe DuplicateFinderService do
       expect(result.first[:file]).to eq 'The Ketogenic Diet_ A Detailed Beginner_s Guide to Keto - Healthline.txt'
 
       first_match = result.first[:matches].first
-      expect(first_match[:phrase]).to eq 'Our website services, content, and products are for informational purposes only'
+      expect(first_match[:phrase]).to eq 'Our website services, content, and products are for informational purposes only.'
       expect(first_match[:indices]).to match_array [23717, 23975]
     end
 

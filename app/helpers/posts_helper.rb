@@ -21,7 +21,10 @@ module PostsHelper
       duped_text = file_content[dupe_start..dupe_end]
       trimmed_content = file_content[min_index..max_index]
 
-      "...#{trimmed_content.gsub(duped_text, "<span class='text-red-500'>#{duped_text}</span>")}..."
+      leading_dots = min_index > 0 ? '...' : ''
+      trailing_dots = max_index < file_content.length ? '...' : ''
+
+      leading_dots + trimmed_content.gsub(duped_text, "<span class='text-red-500'>#{duped_text}</span>") + trailing_dots
     }.join("</div><div class='#{matched_text_class}'>")
 
     "<div class='#{matched_text_class}'>#{inner_content}</div>".html_safe
@@ -42,7 +45,9 @@ private
     plain_text_start_index = plain_text.index(duped_phrase)
     start_index = index
 
-    while plain_text[plain_text_start_index]&.downcase == file_content[start_index]&.downcase
+    while plain_text_start_index >= 0 &&
+      start_index >= 0 &&
+      plain_text[plain_text_start_index]&.downcase == file_content[start_index]&.downcase
 
       start_index -= 1
       plain_text_start_index -= 1
@@ -72,7 +77,9 @@ private
     plain_text_end_index = plain_text.index(duped_phrase) + duped_phrase.length
     end_index = index + duped_phrase.length
 
-    while plain_text[plain_text_end_index]&.downcase == file_content[end_index]&.downcase
+    while plain_text_end_index <= plain_text.length &&
+      end_index <= file_content.length &&
+      plain_text[plain_text_end_index]&.downcase == file_content[end_index]&.downcase
 
       end_index += 1
       plain_text_end_index += 1
