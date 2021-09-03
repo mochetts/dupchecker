@@ -31,16 +31,20 @@ This project is integrated with Travis for CI purposes. Check [this link](https:
 
 Run `bundle exec rspec`
 
+# Description
+
+This project introduces an implementation of a simple plagiarism detection software. For quick demonstration purposes, you can find the app running under this link: https://clearscope-dupchecker.herokuapp.com/
+
 # User flow 🚶🏻‍♀️
 
 1. The user writes some text:
-![image](https://user-images.githubusercontent.com/3678598/131676159-85431acb-4bc4-4028-8b1b-d9f3d5c38c26.png)
+![image](https://user-images.githubusercontent.com/3678598/132024330-1ac89fcb-0f35-496c-a310-a4dd6a10812b.png)
 
 2. The "Check" button is pressed
-![image](https://user-images.githubusercontent.com/3678598/131676261-b925cfe8-2c15-4f5f-8b91-a5fced37a323.png)
+![image](https://user-images.githubusercontent.com/3678598/132024377-4ba5dc38-1eda-4b48-8ab9-8d22698c3438.png)
 
 3. The results show up on the right side of the screen:
-![image](https://user-images.githubusercontent.com/3678598/131676402-87885fd3-ab7c-40a6-a89b-2541e05893e2.png)
+![image](https://user-images.githubusercontent.com/3678598/132024412-882b8ed2-7ab1-494b-9f94-582ba1966cec.png)
 
 4. If no results are found,  we display it accordingly:
 ![image](https://user-images.githubusercontent.com/3678598/131694469-cfc59c40-c8d1-4d64-b71b-e4e16a379843.png)
@@ -58,26 +62,30 @@ The data files in which the algorithm will look for plagiarism are added within 
 
 # Algorithm  ⚙️
 
-The duplicate find algorithm consist in 3 main steps/considerations:
-
-1. Normalize both the input text and the data files contents. The reason behind this is that we can establish a common ground for more accurate comparisons. The normalizations done are:
+In order to compare the input text and the file contents we first normalize both so that we can establish a common ground for a more accurate comparision. The normalizations done are:
  - down-casing
- - replacing the different quotation types for double quotes.
+ - replacing the different quotation types, accented characters and punctuation for double quotes.
 
-2. Split the input text by **punctuations and line breaks**.
+Then the algorithm enters in a 3 steps flow in which the output of one step is the input of the other:
 
-3. Iterate every file looking for duplicate phrases that are longer than a pre stablished **word count of 10**.
+**Step 1)** Find all possible duplications for the phrases matching the criteria. Used the [PragmaticSegmenter](https://github.com/diasks2/pragmatic_segmenter) to split the sentences. We only keep phrases with a **word count of 8**.
+**Step 2)** Expand matches found in **Step 1** so that we extend matching results as much as we can.
+**Step 3)** Merge the results of **Step 2** so that we show matches that are contained within other matches or are consecutive as 1 single match.
 
-This algorithm will return an array containing a hash with the following structure:
+This algorithm will then return an array of struct objects called `FileMatch`. Each `FileMatch` contains an array of `IndexMatch` which indicates where the matches were found (in the input text and in the file).
+
+The following is a similar example of what is returned
 ```rb
 [
-{
-  file: ..., # The name of the file in which the duplicate phrases were found
-  content: ..., # The original content of the file
-  matches: [ # Array of duplicate phrases found within the file
-    {
-      phrase: ..., # The duplicate phrase,
-      indices: ..., # Array of indices in which the phrase was found within the file
+{ # FileMatch
+  file_name: ..., # The name of the file in which the duplicate phrases were found
+  file_content: ..., # The original content of the file
+  phrase_matches: [
+    { # IndexMatch
+      text_start: ..., # Start index in the text input
+      file_start: ..., # Start index in the file content
+      text_end: ..., # End index in the text input
+      file_end: ..., # End index in the file content
     },
     ...
   ]
@@ -86,27 +94,11 @@ This algorithm will return an array containing a hash with the following structu
 ]
 ```
 
-For this algorithm a scan using an exact match regex was used to find the normalized version of a phrase within the normalized version of the file.
+# Displaying results in the UI
 
-# Second stage processing 🔨
+In order to display `IndexMatches` in the UI, a `PostsHelper` was added. This helper contains only one method that is in charge of displaying a single `IndexMatch` within an enclosed HTML structure.
 
-In order to provide a better feedback and extend the algorithm we post process the duplications when rendering them trying to find not only the duplications that are split by punctuations and line breaks, but we extend the lookup forward and backwards for each phrase until we there's no coincidence with the file's original text.
-
-That way we can include phrases that don't meet the minimum word count requirement of the backend algorithm.
-
-For example, this phrase:
-```
-© 2005-2021 Healthline Media a Red Ventures Company. All rights reserved. Our website services, content, and products are for informational purposes only. Healthline Media does not provide medical advice, diagnosis, or treatment. See additional information.
-```
-
-Has only 1 phrase that is 10 words long or more:
-```
-Our website services, content, and products are for informational purposes only
-```
-
-So if one of the data files contains this exact whole text, the duplicate finder service will only find that phrase due to the splitting.
-
-Due to this and in order to be more accurate with the displayed results we post-process the algorithm results in a `PostHelper` trying to match as much as we can backwards and forwards of the initial duplicated phrase.
+It basically highlights the matching text and adds leading and trailing dots `...` showing that there's more file text.
 
 # Performance Consideration 🚀
 
