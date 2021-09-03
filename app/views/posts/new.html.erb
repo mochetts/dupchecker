@@ -4,8 +4,11 @@
 
 <div class="flex flex-column mt-5 divide-x-4 divide-yellow-600 divide-dashed">
 
-  <div class="py-5 pr-5 flex-grow max-w-1/2 min-w-1/2">
+  <div class="py-5 pr-5 flex-grow max-w-1/2 min-w-1/2" data-controller="trix">
     <%= render 'form', post: @post %>
+    <% if defined?(@dupes) && @dupes.any? %>
+      <input type="hidden" data-trix-target="dupes" value="<%= @dupes.flat_map { |dupe| dupe.phrase_matches.map { |phrase_match| [phrase_match.text_start, phrase_match.text_end] } }.uniq.as_json %>">
+    <% end %>
   </div>
 
   <% if defined?(@dupes) %>

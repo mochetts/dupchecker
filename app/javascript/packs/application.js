@@ -11,10 +11,23 @@
 
 require("@rails/activestorage").start()
 require("channels")
-require("trix")
+const Trix = require("trix")
 require("@rails/actiontext")
 
 import "controllers"
 
 // Tailwind CSS
 import "stylesheets/application" // ADD THIS LINE
+
+Trix.config.textAttributes.highlight = {
+  style: { color: "red" },
+  parser: function(element) {
+    return element.style.color === "red"
+  },
+  inheritable: true
+}
+
+addEventListener("trix-initialize", function(event) {
+  var buttonHTML = '<button type="button" class="hidden" data-trix-attribute="highlight">H</button>'
+  event.target.toolbarElement.querySelector(".trix-button-group--text-tools").insertAdjacentHTML("beforeend", buttonHTML)
+})

@@ -111,5 +111,4 @@ Worthy to say that this is good for this particular task, but in a real world sc
 # Future work 🔮
 
 1. Add a way (sidebar or modal) to show the full file contents highlighting the duplications
-2. Highlight the duplicated text in the rich text editor
-3. Add integration tests (e.g using selenium)
+2. Add integration tests (e.g using selenium)

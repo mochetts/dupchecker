@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-    <%= form.rich_text_area :content, cols: 200, rows: 30 %>
+    <%= form.rich_text_area :content, cols: 200, rows: 30, data: { 'trix-target': 'element' } %>
   </div>
 
   <div class="actions mt-5">
