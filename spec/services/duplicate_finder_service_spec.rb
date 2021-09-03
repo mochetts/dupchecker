@@ -146,6 +146,35 @@ RSpec.describe DuplicateFinderService do
       expect(phrase_mach.text_end).to eq 257
       expect(phrase_mach.file_end).to eq 24158
     end
+
+    it "should ignore whitespaces and newlines in the input text" do
+      test_text = '© 2005-2021 Healthline Media a Red Ventures Company.
+
+      All rights reserved.
+
+      Our website services, content, and products are for informational purposes only.
+
+      Healthline Media does not provide medical
+
+      advice, diagnosis, or treatment.
+
+      See additional information.'
+
+      result = DuplicateFinderService.new(test_text).perform
+
+      # Assert files
+      expect(result.count).to eq 2
+      file_match = result.first
+      expect(file_match.file_name).to eq "The Ketogenic Diet_ A Detailed Beginner_s Guide to Keto - Healthline.txt"
+
+      # Assert phrases
+      expect(file_match.phrase_matches.count).to eq 1
+      phrase_mach = file_match.phrase_matches.first
+      expect(phrase_mach.text_start).to eq 0
+      expect(phrase_mach.file_start).to eq 23643
+      expect(phrase_mach.text_end).to eq 292
+      expect(phrase_mach.file_end).to eq 24158
+    end
   end
 
 end

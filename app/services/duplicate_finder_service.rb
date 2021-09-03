@@ -148,13 +148,13 @@ private
 
     # Warning: The below line has a strict requirement:
     # Identical phrases, but with different amount of whitespaces between words, don't match
-    text_end_index = text.index(duped_phrase) + duped_phrase.length
+    text_end_index = text.index(duped_phrase) + duped_phrase.length - 1
 
     match.indices.map { |index|
       file_start_index = index
       min_start_indices = expand_index_backward(file_content, text_start_index, file_start_index)
 
-      file_end_index = index + duped_phrase.length
+      file_end_index = index + duped_phrase.length - 1
       max_end_indices = expand_index_forward(file_content, text_end_index, file_end_index)
 
       indices = min_start_indices + max_end_indices
