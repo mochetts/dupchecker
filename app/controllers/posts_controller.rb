@@ -8,8 +8,7 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @post = Post.new(post_params)
-    @plain_text = @post.content.to_plain_text
-    @dupes = DuplicateFinderService.find_for(@plain_text)
+    @dupes = DuplicateFinderService.new(@post.content.to_plain_text).perform
     render :new
   end
 

@@ -12,7 +12,7 @@
     <div class="p-5 bl flex-grow">
       <% if @dupes.any? %>
         <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate">Results Found</h2>
-        <%= render partial: "dupe", collection: @dupes, as: :dupe, locals: { plain_text: @plain_text } %>
+        <%= render partial: "dupe", collection: @dupes, as: :dupe %>
       <% else %>
         <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate">Excellent! No Plagiarism Found...</h2>
       <% end %>

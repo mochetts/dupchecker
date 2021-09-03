@@ -1,5 +1,5 @@
 <div class="mt-4">
-  <div class="text-purple-600 font-bold"><%= dupe[:file_name] %></div>
-  <%= render partial: "phrase_match", collection: dupe[:matches], as: :match, locals: { dupe: dupe, plain_text: plain_text } %>
+  <div class="text-purple-600 font-bold"><%= dupe.file_name %></div>
+  <%= render partial: "phrase_match", collection: dupe.phrase_matches, as: :phrase_match, locals: { dupe: dupe } %>
   <br/>
 </div>
