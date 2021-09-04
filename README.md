@@ -37,7 +37,7 @@ Run `bundle exec rspec`
 1. The user writes some text:
 ![image](https://user-images.githubusercontent.com/3678598/132024330-1ac89fcb-0f35-496c-a310-a4dd6a10812b.png)
 
-2. The "Check" button is pressed
+2. The "Detect" button is pressed
 ![image](https://user-images.githubusercontent.com/3678598/132024377-4ba5dc38-1eda-4b48-8ab9-8d22698c3438.png)
 
 3. The results show up on the right side of the screen:
